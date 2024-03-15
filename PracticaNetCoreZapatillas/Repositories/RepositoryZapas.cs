@@ -1,8 +1,27 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using PracticaNetCoreZapatillas.Data;
 using PracticaNetCoreZapatillas.Models;
 using System.Data;
+
+
+#region PROCEDURES
+/*create procedure SP_IMAGENES_ZAPATILLA
+(@posicion int, @idproducto int
+, @registros int out)
+as
+select @registros = count(IDIMAGEN) from IMAGENESZAPASPRACTICA
+where IDPRODUCTO=@idproducto
+select IDIMAGEN, IDPRODUCTO, IMAGEN from
+(select cast(
+ROW_NUMBER() OVER (ORDER BY IMAGEN) as int) AS POSICION
+, IDIMAGEN, IDPRODUCTO, IMAGEN
+from IMAGENESZAPASPRACTICA
+where IDPRODUCTO=@idproducto) as QUERY
+WHERE  QUERY.POSICION = @posicion
+GO*/
+#endregion
 
 namespace PracticaNetCoreZapatillas.Repositories
 {
@@ -26,20 +45,46 @@ namespace PracticaNetCoreZapatillas.Repositories
 
 		public async Task<ModelPaginacionImagenes> GetImagenesZapa(int posicion, int idproducto)
 		{
-			string sql = "SP_IMGAGENES_ZAPATILLA @posicion, @idproducto, @registros out";
+			string sql = "SP_IMAGENES_ZAPATILLA @posicion, @idproducto, @registros out";
 			SqlParameter pamPosicion = new SqlParameter("@posicion", posicion);
 			SqlParameter pamIdProducto = new SqlParameter("@idproducto", idproducto);
 			SqlParameter pamRegistros = new SqlParameter("@registros", -1);
 			pamRegistros.Direction = ParameterDirection.Output;
 
-			var consulta = this.context.Imegenes.FromSqlRaw(sql, pamPosicion, pamIdProducto, pamRegistros);
-			var datos= await consulta.ToListAsync();
-			Imagen imagen = datos.FirstOrDefault();
+			var consulta = this.context.Imagenes.FromSqlRaw(sql, pamPosicion, pamIdProducto, pamRegistros);
+			var datos = await consulta.ToListAsync();
+			/*Imagen imagen = datos.FirstOrDefault();*/
+			List<Imagen> imagenes = datos;
 			int registros = (int)pamRegistros.Value;
 			return new ModelPaginacionImagenes
 			{
-				Registros = registros, 
-				Imagen =imagen
+				Zapatilla = await this.FindZapatilla(idproducto),
+				Registros = registros,
+				Imagen = imagenes.FirstOrDefault()
+			};
+		}
+
+		public async Task<int> GetMaxIdImagen()
+		{
+			if (await this.context.Imagenes.CountAsync() == 0) return 1;
+			return await this.context.Imagenes.MaxAsync(x => x.IdImagen) + 1;
+		}
+
+		public async Task CreateImagenAsync(List<string> imagenes, int idproducto)
+		{
+			int idImagen = await this.context.Imagenes.MaxAsync(x => x.IdImagen) + 1;
+            foreach (string imagen in imagenes)
+			{
+				await this.context.Imagenes.AddAsync
+				(
+					new Imagen
+					{
+						IdImagen = idImagen,
+						IdProducto = idproducto,
+						Img = imagen
+					}
+				);
+				await this.context.SaveChangesAsync();
 			}
 		}
 	}

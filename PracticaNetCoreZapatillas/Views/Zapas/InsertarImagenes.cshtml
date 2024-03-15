@@ -1,0 +1,43 @@
+﻿@model List<Zapatilla>
+<h1>Insertar Imagenes</h1>
+
+<button class="btn btn-danger" id="btnNuevaImagenCaja">
+    Insertar Nueva Caja IMG
+</button>
+
+<div style="width: 650px;margin: 0 auto;padding:10px; border-spacing: 10px">
+    <form method="post" id="form1" class="border border-primary" style="padding: 10px">
+        <fieldset>
+            <legend>Formulario</legend>
+            <button class="btn btn-primary">
+                Insertar imágenes POST
+            </button>
+        </fieldset>
+
+        <br>
+        <div class="mb-3">
+            <label>Seleccione una zapatilla</label>
+            <select name="idproducto" class="form-select">
+                @foreach (Zapatilla zapa in Model)
+                {
+                    <option value="@zapa.IdProducto">@zapa.Nombre</option>
+                }
+            </select>
+        </div>
+        <div class="mb-3">
+            <input type="text" name="Imagenes" class="form-control">
+        </div>
+    </form>
+</div>
+
+@section Scripts{
+    <script>
+        $(function(){
+            $("#btnNuevaImagenCaja").on("click", function(){
+                let cajaNueva = $("<input>").attr("type", "text").attr("name", "imagenes")
+                    .addClass("form-control mt-3");
+                $("form").append(caja);
+            })
+        })
+    </script>
+}

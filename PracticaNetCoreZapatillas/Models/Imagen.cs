@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PracticaNetCoreZapatillas.Models
 {
+	[Table("IMAGENESZAPASPRACTICA")]
 	public class Imagen
 	{
 
@@ -12,6 +13,6 @@ namespace PracticaNetCoreZapatillas.Models
 		[Column("IDPRODUCTO")]
 		public int IdProducto { get; set; }
 		[Column("IMAGEN")]
-		public string Imagen { get; set; }
+		public string Img { get; set; }
 	}
 }

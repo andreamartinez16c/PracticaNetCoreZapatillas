@@ -7,6 +7,6 @@ namespace PracticaNetCoreZapatillas.Data
 	{
 		public ZapasContext(DbContextOptions<ZapasContext> options) : base(options) { }
 		public DbSet<Zapatilla> Zapas { get; set; }
-		public DbSet<Imagen> Imegenes { get; set;}
+		public DbSet<Imagen> Imagenes { get; set;}
 	}
 }

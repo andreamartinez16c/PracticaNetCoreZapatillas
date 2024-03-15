@@ -1,88 +1,43 @@
 ﻿@model Imagen
 
 @{
-    Zapatilla zapa = ViewData["ZAPASELECCIONADA"] as Zapatilla;
+	Zapatilla zapa = ViewData["ZAPATILLA"] as Zapatilla;
 }
 
-<h1>Imagenes @zapa.Nombre</h1>
-<p>
-    <a asp-controller="Zapas"
-       asp-action="Index">
-        Volver a Index
-    </a>
-</p>
+<h1>Nombre: @zapa.Nombre</h1>
+<p>@zapa.Descripcion</p>
+<h4>Precio: @zapa.Precio€</h4>
+
 
 @* <ul class="list-group">
-    <li class="list-group-item list-group-item-danger">
-        Id Departamento: @departamento.IdDepartamento
-    </li>
-    <li class="list-group-item list-group-item-info">
-        Nombre: @departamento.Nombre
-    </li>
-    <li class="list-group-item list-group-item-info">
-        Localidad: @departamento.Localidad
-    </li>
+<li class="list-group-item list-group-item-danger">
+Id Departamento: @departamento.IdDepartamento
+</li>
+<li class="list-group-item list-group-item-info">
+Nombre: @departamento.Nombre
+</li>
+<li class="list-group-item list-group-item-info">
+Localidad: @departamento.Localidad
+</li>
 </ul> *@
 
-<h2 style="color:blue">
-    Registro @ViewData["POSICION"] de @ViewData["REGISTROS"]
-</h2>
+<div id="visualizarImagen"></div>
 
-@* <div id="contentempleado"></div>
-<partial name="_PaginacionEmpDept" /> *@
+<p>
+	<a asp-controller="Zapas"
+	   asp-action="Index">
+		Volver a Index
+	</a>
+</p>
 
-
-<div>
-	<ul class="list-group list-group-horizontal">
-		<li class="list-group-item">
-			<a asp-controller="Zapas"
-			   asp-action="ImagenesZapas"
-			   asp-route-posicion="1"
-			   asp-route-idproducto="@ViewData["ZAPATILLA"]">
-				Primero
-			</a>
-		</li>
-		<li class="list-group-item">
-			<a asp-controller="Zapas"
-			   asp-action="ImagenesZapas"
-			   asp-route-posicion="@ViewData["ANTERIOR"]"
-			   asp-route-idproducto="@ViewData["ZAPATILLA"]">
-				Anterior
-			</a>
-		</li>
-		<li class="list-group-item">
-			<a asp-controller="Zapas"
-			   asp-action="ImagenesZapas"
-			   asp-route-posicion="@ViewData["SIGUIENTE"]"
-			   asp-route-idproducto="@ViewData["ZAPATILLA"]">
-				Siguiente
-			</a>
-		</li>
-		<li class="list-group-item">
-			<a asp-controller="Zapas"
-			   asp-action="ImagenesZapas"
-			   asp-route-posicion="@ViewData["ULTIMO"]"
-			   asp-route-idproducto="@ViewData["ZAPATILLA"]">
-				Ultimo
-			</a>
-		</li>
-	</ul>
-</div>
-<hr />
-<ul class="list-group">
-	<li class="list-group-item list-group-item-info">
-		Id Empleado: @Model.IdImagen
-	</li>
-	<li class="list-group-item list-group-item-info">
-		Apellido: @Model.Apellido
-	</li>
-	<li class="list-group-item list-group-item-info">
-		Oficio: @Model.Oficio
-	</li>
-	<li class="list-group-item list-group-item-info">
-		Salario: @Model.Salario
-	</li>
-	<li class="list-group-item list-group-item-info">
-		Departamento: @Model.IdDepartamento
-	</li>
-</ul>
+@section Scripts {
+	<script>
+		function loadImgPaginacion(posicion){
+			$(function() {
+				$("#visualizarImagen").load
+					("/Zapas/_PartialPaginacionImagenes?posicion=" + posicion + "&idproducto=" + @zapa.IdProducto);
+			})
+		}
+		loadImgPaginacion(1);
+	</script>
+}

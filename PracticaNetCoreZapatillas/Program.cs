@@ -1,7 +1,17 @@
+using Microsoft.EntityFrameworkCore;
+using PracticaNetCoreZapatillas.Data;
+using PracticaNetCoreZapatillas.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddTransient<RepositoryZapas>();
+string connectionString =
+builder.Configuration.GetConnectionString("SqlServer");
+builder.Services.AddDbContext<ZapasContext>
+(options => options.UseSqlServer(connectionString));
 
 var app = builder.Build();
 

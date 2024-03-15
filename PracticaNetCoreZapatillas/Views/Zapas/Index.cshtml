@@ -6,9 +6,9 @@
 	@foreach (Zapatilla zapa in Model)
 	{
 		<li class="list-group-item">
-			<a class="btn btn-dark" asp-controller="Paginacion"
-			   asp-action="EmpleadosDepartamento"
-			   asp-route-iddepartamento="@zapa.IdProducto">
+			<a class="btn btn-dark" asp-controller="Zapas"
+			   asp-action="ImagenesZapa"
+			   asp-route-idproducto="@zapa.IdProducto">
 				@zapa.Nombre
 			</a>
 		</li>
