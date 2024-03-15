@@ -24,8 +24,8 @@
                 }
             </select>
         </div>
-        <div class="mb-3">
-            <input type="text" name="Imagenes" class="form-control">
+        <div id="contenedorInputs">
+            <input type="text" name="imagenes" class="form-control">
         </div>
     </form>
 </div>
@@ -33,10 +33,14 @@
 @section Scripts{
     <script>
         $(function(){
-            $("#btnNuevaImagenCaja").on("click", function(){
-                let cajaNueva = $("<input>").attr("type", "text").attr("name", "imagenes")
-                    .addClass("form-control mt-3");
-                $("form").append(caja);
+            $("#btnNuevaImagenCaja").click(function(){
+                let container = $("#contenedorInputs");
+                let cajaNueva = $("<input>", {
+                    "type": "text",
+                    "name": "imagenes",
+                    "class": "form-control"
+                });
+                container.append(cajaNueva);
             })
         })
     </script>

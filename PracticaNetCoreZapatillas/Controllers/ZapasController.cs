@@ -63,7 +63,7 @@ namespace PracticaNetCoreZapatillas.Controllers
 		public async Task<IActionResult> InsertarImagenes(List<string> imagenes, int idproducto)
 		{
 			await this.repo.CreateImagenAsync(imagenes, idproducto);
-			return RedirectToAction("ImagenesZapas", new {iidproducto = idproducto});
+			return RedirectToAction("ImagenesZapa", new {idproducto = idproducto});
 		}
 	}
 }

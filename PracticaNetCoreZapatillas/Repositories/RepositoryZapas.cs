@@ -64,22 +64,18 @@ namespace PracticaNetCoreZapatillas.Repositories
 			};
 		}
 
-		public async Task<int> GetMaxIdImagen()
-		{
-			if (await this.context.Imagenes.CountAsync() == 0) return 1;
-			return await this.context.Imagenes.MaxAsync(x => x.IdImagen) + 1;
-		}
 
 		public async Task CreateImagenAsync(List<string> imagenes, int idproducto)
 		{
-			int idImagen = await this.context.Imagenes.MaxAsync(x => x.IdImagen) + 1;
+			
             foreach (string imagen in imagenes)
 			{
-				await this.context.Imagenes.AddAsync
+                int idImage = await this.context.Imagenes.MaxAsync(x => x.IdImagen) + 1;
+                await this.context.Imagenes.AddAsync
 				(
 					new Imagen
 					{
-						IdImagen = idImagen,
+						IdImagen = idImage,
 						IdProducto = idproducto,
 						Img = imagen
 					}
